@@ -8,6 +8,7 @@ public final class TicTacToe {
   private static char playerOneSign;
   private static char playerTwoSign;
   private static final char[] states = new char[9];
+  private static int turns = 0;
 
 
   private TicTacToe() {
@@ -17,31 +18,18 @@ public final class TicTacToe {
   public static void main(String[] args) {
     while (true) {
       resetState();
-      askAndSetPlayerSigns();
 
-      int turns = 0;
-      game:
       while (true) {
-        int playerNumber = (turns % 2) == 1 ? 2 : 1;
-        char playerChar = playerNumber > 1 ? playerTwoSign : playerOneSign;
-        System.out.println();
         printBoard();
 
-        char winner = whoWon();
-        if (winner > 0) {
-          System.out.println("P" + playerNumber + " (" + winner + ") won!\nThe game took " + turns + " turns.\n");
-          while (true) {
-            System.out.println("Play again? (y / n)");
-            String choice = scanner.nextLine().toUpperCase();
-            switch (choice) {
-              case "Y" -> {
-                break game;
-              }
-              case "N" -> System.exit(0);
-              default -> System.out.println("Invalid input!");
-            }
-          }
+        if (turns == 9) {
+          System.out.println("Draw!");
+          askPlayAgain();
+          break;
         }
+
+        int playerNumber = (turns % 2) == 1 ? 2 : 1;
+        char playerChar = playerNumber > 1 ? playerTwoSign : playerOneSign;
 
         choice:
         while (true) {
@@ -60,7 +48,30 @@ public final class TicTacToe {
             default -> System.out.println("Invalid input!");
           }
         }
+
+        char winner = whoWon();
+        if (winner > 0) {
+          printBoard();
+          System.out.println("P" + playerNumber + " (" + winner + ") won!\nThe game took " + (turns + 1) + " turns.\n");
+          askPlayAgain();
+          break;
+        }
+
         turns++;
+      }
+    }
+  }
+
+  private static void askPlayAgain() {
+    while (true) {
+      System.out.println("Play again? (y / n)");
+      String choice = scanner.nextLine().toUpperCase();
+      switch (choice) {
+        case "Y" -> {
+          return;
+        }
+        case "N" -> System.exit(0);
+        default -> System.out.println("Invalid input!");
       }
     }
   }
@@ -90,7 +101,7 @@ public final class TicTacToe {
   }
 
   private static void printBoard() {
-    String str = String.format(" %s | %s | %s \n---+---+---\n %s | %s | %s \n---+---+---\n %s | %s | %s ",
+    String str = String.format("\n %s | %s | %s \n---+---+---\n %s | %s | %s \n---+---+---\n %s | %s | %s ",
             states[0], states[1], states[2], states[3], states[4], states[5], states[6], states[7], states[8]);
 
     System.out.println(str);
@@ -98,6 +109,8 @@ public final class TicTacToe {
 
   private static void resetState() {
     for (int i = 0; i < states.length; i++) states[i] = (i + 1 + "").charAt(0);
+    turns = 0;
+    askAndSetPlayerSigns();
   }
 
   private static char whoWon() {
