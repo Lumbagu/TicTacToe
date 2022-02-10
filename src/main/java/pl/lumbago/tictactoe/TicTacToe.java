@@ -5,10 +5,9 @@ import java.util.Scanner;
 public final class TicTacToe {
 
   private static final Scanner scanner = new Scanner(System.in);
-  private static char playerOneSign;
-  private static char playerTwoSign;
+  private static char playerOneSign, playerTwoSign;
   // this represents the 3x3 game board
-  private static final char[] state = new char[9];
+  private static char[] state;
   // current game turns counter
   private static int turns;
 
@@ -134,7 +133,7 @@ public final class TicTacToe {
 
   private static void resetState() {
     // setting spots numbers as their values
-    for (int i = 0; i < state.length; i++) state[i] = (i + 1 + "").charAt(0);
+    state = new char[]{'1', '2', '3', '4', '5', '6', '7', '8', '9'};
     turns = 0;
     askAndSetPlayerSigns();
   }
