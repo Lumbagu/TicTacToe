@@ -14,7 +14,7 @@ public final class TicTacToe {
   }
 
 
-  public static void play() {
+  public static void main(String[] args) {
     while (true) {
       resetState();
       askAndSetPlayerSigns();
